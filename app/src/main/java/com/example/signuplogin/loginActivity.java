@@ -47,9 +47,15 @@ public class loginActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                     @Override
                                     public void onSuccess(AuthResult authResult) {
+                                        //added
+                                        if (Objects.equals(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail(), "admin@studentportal.cse")) {
+                                            startActivity(new Intent(loginActivity.this, adminActivity.class));
+                                            finish();
+                                        } else {
+                                            startActivity(new Intent(loginActivity.this, MainActivity.class));
+                                            finish();
+                                        }
                                         Toast.makeText(loginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(loginActivity.this, MainActivity.class));
-                                        finish();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -75,5 +81,21 @@ public class loginActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    //added
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            if (Objects.equals(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail(), "admin@studentportal.cse")) {
+                startActivity(new Intent(loginActivity.this, adminActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(loginActivity.this, MainActivity.class));
+                finish();
+            }
+        }
     }
 }
